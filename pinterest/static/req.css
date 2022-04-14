@@ -116,3 +116,35 @@
     border-radius: 20px;
     cursor: pointer;
 }
+
+.text {
+    font-size: 40px;
+    position: absolute center;
+    text-align: center;
+    padding-left: 0%;
+    color: #000;
+    margin-top: 43px;
+  }
+
+  .trick {
+    display: inline-block;
+    vertical-align: middle;
+    height: 150px;
+  }
+
+  .image {
+    text-align: center;
+    width: 200px;
+    /* Container's dimensions */
+    
+    height: 200px;
+    -webkit-border-radius: 75%;
+    -moz-border-radius: 75%;
+    box-shadow: 0 0 0 1px #eee;
+    background: url("https://images.unsplash.com/photo-1648869190057-4a2e50d0395b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80") center center no-repeat;
+    background-size: cover;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: -30px;
+    align-content: center;
+  }
