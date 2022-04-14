@@ -17,7 +17,7 @@ class ImageCreateForm(forms.ModelForm):
 
     class Meta:
         model = Image
-        fields = ('title', 'url', 'description')
+        fields = ('image', 'title', 'url', 'description')
         widgets = {
             'url': forms.HiddenInput,
         }

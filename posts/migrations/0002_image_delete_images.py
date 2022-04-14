@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=255)),
                 ('slug', models.SlugField(blank=True, max_length=200)),
                 ('url', models.URLField()),
-                ('image', models.ImageField(upload_to='images/%Y/%M/%d')),
+                ('image', models.ImageField(upload_to='images')),
                 ('description', models.TextField(blank=True)),
                 ('created', models.DateField(auto_now=True, db_index=True)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to=settings.AUTH_USER_MODEL)),

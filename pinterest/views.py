@@ -1,8 +1,10 @@
+from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 
 
 def index(request):
@@ -25,7 +27,7 @@ def register(request):
             if User.objects.filter(email=email).exists():
                 messages.error(request, "Email already taken")
             else:
-                user = User.objects.create(username=username, first_name=uname, last_name=surname,
+                user = User.objects.create_user(username=username, first_name=uname, last_name=surname,
                                            email=email, password=pass1)
                 user.save()
                 if user is not None:
@@ -40,9 +42,9 @@ def register(request):
 
 def login(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        pass1 = request.POST.get('pass1')
-        user = auth.authenticate(username=username, password=pass1)
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
 
         if user is not None:
             auth.login(request, user)
