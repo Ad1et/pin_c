@@ -18,8 +18,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=255)),
-                ('slug', models.SlugField(blank=True, max_length=200)),
-                ('url', models.URLField()),
                 ('image', models.ImageField(upload_to='images')),
                 ('description', models.TextField(blank=True)),
                 ('created', models.DateField(auto_now=True, db_index=True)),

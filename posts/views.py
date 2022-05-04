@@ -6,12 +6,12 @@ from .forms import ImageCreateForm
 
 @login_required
 def image_create(request):
-    def get_absolute_url(self):
-        return "/images/" % self.name
+
     if request.method == 'POST':
         form = ImageCreateForm(data=request.POST)
         if form.is_valid():
-            new_item = form.save(commit=False)
+            cd = form.cleaned_data
+            new_item = form.save(commit=True)
             new_item.user = request.user
             new_item.save()
             messages.success(request, 'Image added')

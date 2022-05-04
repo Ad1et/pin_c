@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>PostCreation</title>
 </head>
 <body>
-    <img src="{{ request.GET.url }}" class="image-preview">
-    <form action="#" method="POST">
-        {{ form.as_p }}
+    <form method="POST" enctype='multipart/form-data'>
         {% csrf_token %}
-        <input type="submit" value="Pin Image">
+        {{ form.as_p }}
+        <button type="submit">Pin image</button>
     </form>
 </body>
 </html>

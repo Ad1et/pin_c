@@ -12,12 +12,12 @@ class ImageCreateForm(forms.ModelForm):
         valid_extensions = ['jpg', 'jpeg']
         extension = url.rsplit('.', 1)[1].lower()
         if extension not in valid_extensions:
-            raise forms.ValidationError('The given URL is wrong')
+            raise forms.ValidationError('The given extension is wrong')
         return url
 
     class Meta:
         model = Image
-        fields = ('image', 'title', 'url', 'description')
+        fields = ['image', 'title', 'url', 'description']
         widgets = {
             'url': forms.HiddenInput,
         }
@@ -28,7 +28,7 @@ class ImageCreateForm(forms.ModelForm):
         image_name = '{}.{}'.format(slugify(image.title), image_url.rsplit('.', 1)[1].lower())
 
         response = request.urlopen(image_url)
-        image.image.save(image_name, ContentFile(response.read(), save=False)),
+        image.image.save(image_name, ContentFile(response.read()), save=False)
 
         if commit:
             image.save()
