@@ -1,23 +1,37 @@
 from django.db import models
-from django.conf import settings
-from django.utils.text import slugify
+from mimetypes import guess_type
+
+from accounts.models import User
+from boards.models import Board
 
 
-class Image(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='images', on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=200, blank=True)
-    url = models.URLField()
-    image = models.ImageField(upload_to='images/')
-    description = models.TextField(blank=True)
-    created = models.DateField(auto_now=True, db_index=True)
-    users_like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='images_liked', blank=True)
+class Pin(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='pin_user'
+    )
+    board = models.ForeignKey(
+        Board, on_delete=models.CASCADE, related_name='boards'
+    )
+    file = models.FileField(upload_to='pins')
+    title = models.CharField(max_length=250)
+    link = models.CharField(max_length=250)
+    description = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
-        super(Image, self).save(*args, **kwargs)
+    def get_type(self):
+        file_type = guess_type(self.file.url, strict=True)[0]
+        if 'image' in file_type:
+            return 'image'
 
+
+class Comment(models.Model):
+    pin = models.ForeignKey(Pin, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='all_comments')
+    text = models.CharField(max_length=250)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user} says {self.text}'

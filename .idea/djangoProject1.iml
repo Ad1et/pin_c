@@ -28,7 +28,10 @@
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
     <option name="TEMPLATE_FOLDERS">
       <list>
-        <option value="$MODULE_DIR$/../djangoProject1\templates" />
+        <option value="$MODULE_DIR$/boards/templates" />
+        <option value="$MODULE_DIR$/pinterest/templates" />
+        <option value="$MODULE_DIR$/posts/templates" />
+        <option value="$MODULE_DIR$/accounts/templates" />
       </list>
     </option>
   </component>

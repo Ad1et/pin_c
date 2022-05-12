@@ -4,9 +4,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', include('pinterest.urls')),
-    path('admin/', admin.site.urls),
+    path('', include('pinterest.urls', namespace='pinterest')),
     path('posts/', include('posts.urls', namespace='posts')),
+    path('boards/', include('boards.urls', namespace='boards')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('admin/', admin.site.urls),
 
 ]
 

@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pinterest.apps.PinterestConfig',
     'posts.apps.PostsConfig',
-    ]
+    'boards.apps.BoardsConfig',
+    'accounts.apps.AccountsConfig',
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,7 +83,7 @@ WSGI_APPLICATION = 'djangoProject1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'sqlite3',
     }
 }
 
@@ -129,6 +131,7 @@ STATIC_URL = 'static/'
 MEDIA_URL = '/images/'
 BASE_DIR = os.path.join(BASE_DIR, 'images')
 
+LOGIN_URL = 'accounts:user_login'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

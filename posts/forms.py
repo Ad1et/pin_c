@@ -1,35 +1,67 @@
-from django import forms
-from .models import Image
+from django.forms import ModelForm
 
-from urllib import request
-from django.core.files.base import ContentFile
-from django.utils.text import slugify
+from .models import Pin, Comment
+from boards.models import Board
 
 
-class ImageCreateForm(forms.ModelForm):
-    def clean_url(self):
-        url = self.cleaned_data['url']
-        valid_extensions = ['jpg', 'jpeg']
-        extension = url.rsplit('.', 1)[1].lower()
-        if extension not in valid_extensions:
-            raise forms.ValidationError('The given extension is wrong')
-        return url
-
+class CreatePinForm(ModelForm):
     class Meta:
-        model = Image
-        fields = ['image', 'title', 'url', 'description']
-        widgets = {
-            'url': forms.HiddenInput,
-        }
+        model = Pin
+        fields = ['board', 'file', 'title', 'description', 'link']
 
-    def save(self, force_insert=False, force_update=False, commit=True):
-        image = super(ImageCreateForm, self).save(commit=False)
-        image_url = self.cleaned_data['url']
-        image_name = '{}.{}'.format(slugify(image.title), image_url.rsplit('.', 1)[1].lower())
+    def __init__(self, user, *args, **kwargs):
+        super(CreatePinForm, self).__init__(*args, **kwargs)
+        self.fields['board'].queryset = Board.objects.filter(user=user)
+        self.fields['title'].widget.attrs['placeholder'] = 'Add a Title'
+        self.fields['description'].widget.attrs['placeholder'] = 'Tell everyone what your pin is about..'
+        self.fields['link'].widget.attrs['placeholder'] = 'Add a destination link'
+        for visible in self.visible_fields():
+            if visible.name == 'description':
+                visible.field.widget.attrs['class'] = 'description-input border form-control'
+            elif visible.name == 'board':
+                visible.field.widget.attrs['class'] = 'board-input border form-control'
+            else:
+                visible.field.widget.attrs['class'] = 'form-control border rounded-pill'
 
-        response = request.urlopen(image_url)
-        image.image.save(image_name, ContentFile(response.read()), save=False)
 
-        if commit:
-            image.save()
-        return image
+class SaveToBoard(ModelForm):
+    class Meta:
+        model = Pin
+        fields = ['board']
+
+    def __init__(self, user, *args, **kwargs):
+        super(SaveToBoard, self).__init__(*args, **kwargs)
+        self.fields['board'].queryset = Board.objects.filter(user=user)
+        for visible in self.visible_fields():
+            if visible.name == 'board':
+                visible.field.widget.attrs['class'] = 'board-input border form-control'
+
+
+class EditPinForm(ModelForm):
+    class Meta:
+        model = Pin
+        fields = ['board', 'title', 'description', 'link']
+
+    def __init__(self, user, *args, **kwargs):
+        super(EditPinForm, self).__init__(*args, **kwargs)
+        self.fields['board'].queryset = Board.objects.filter(user=user)
+        self.fields['title'].widget.attrs['placeholder'] = 'Add a Title'
+        self.fields['description'].widget.attrs['placeholder'] = 'Tell everyone what your pin is about..'
+        self.fields['link'].widget.attrs['placeholder'] = 'Add a destination link'
+        for visible in self.visible_fields():
+            if visible.name == 'description':
+                visible.field.widget.attrs['class'] = 'description-input border form-control'
+            else:
+                visible.field.widget.attrs['class'] = 'form-control border rounded-pill'
+
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+        self.fields['text'].widget.attrs['placeholder'] = 'Add comment'
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control rounded-pill border'
